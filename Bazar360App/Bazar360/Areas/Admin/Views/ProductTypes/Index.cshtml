@@ -27,8 +27,9 @@
         {
             <tr>
                 <td>@item.ProductType</td>
+              @*  ----------------------Partial View--------------*@------
                 <td>
-                   Edit | Detail | Delete
+                    <partial name="_ButtonPartial" model="item.Id"/>
                 </td>
             </tr>
         }
