@@ -35,6 +35,34 @@ namespace Bazar360.Areas.Admin.Controllers
             }
             return View(productTypes);
         }
+
+
+        public ActionResult Edit(int? id)
+        {
+            if (id ==null)
+            {
+                return NotFound();
+            }
+            var productTypes = _db.ProductTypes.Find(id);
+            if (productTypes==null)
+            {
+                return NotFound();
+            }
+            return View(productTypes);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProductTypes productTypes)
+        {
+            if (ModelState.IsValid) //Server Side Valid
+            {
+                _db.ProductTypes.Update(productTypes);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(actionName: nameof(Index));
+            }
+            return View(productTypes);
+        }
     }
 }
 
