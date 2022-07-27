@@ -77,6 +77,52 @@ namespace Bazar360.Areas.Admin.Controllers
             }
             return View(productTypes);
         }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var productTypes = _db.ProductTypes.Find(id);
+            if (productTypes == null)
+            {
+                return NotFound();
+            }
+            return View(productTypes);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task <ActionResult> Delete(int? id, ProductTypes productTypes)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (id != productTypes.Id)
+            {
+                return NotFound();
+            }
+
+            var productType = _db.ProductTypes.Find(id);
+            if (productTypes == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _db.ProductTypes.Remove(productType);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(productTypes);
+        }
+
+
     }
 }
 
