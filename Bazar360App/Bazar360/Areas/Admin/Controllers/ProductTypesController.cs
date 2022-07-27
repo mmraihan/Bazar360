@@ -63,6 +63,20 @@ namespace Bazar360.Areas.Admin.Controllers
             }
             return View(productTypes);
         }
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var productTypes = _db.ProductTypes.Find(id);
+            if (productTypes == null)
+            {
+                return NotFound();
+            }
+            return View(productTypes);
+        }
     }
 }
 
