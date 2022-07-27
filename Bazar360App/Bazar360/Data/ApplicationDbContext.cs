@@ -11,5 +11,6 @@ namespace Bazar360.Data
         {
         }
         public DbSet<ProductTypes> ProductTypes { get; set; }
+        public DbSet<SpecialTag> SpecialTags { get; set; }
     }
 }
