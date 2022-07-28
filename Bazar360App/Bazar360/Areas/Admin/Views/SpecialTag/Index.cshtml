@@ -35,3 +35,30 @@
         }
     </table>
 </div>
+
+
+   @*  ----------------------Alertify--------------*@
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $(function() {
+
+            var save = '@TempData["save"]'
+            if(save!='') {
+                alertify.success(save);
+            }
+            var edit = '@TempData["edit"]'
+            if(edit != '') {
+                alertify.success(edit);
+            }
+            var del = '@TempData["delete"]'
+            if (del!='') {
+                alertify.error(del);
+            }
+
+
+        })
+
+    </script>
+}

@@ -30,7 +30,9 @@ namespace Bazar360.Areas.Admin.Controllers
             {
                 _db.SpecialTags.Add(specialTag);
                 await _db.SaveChangesAsync();
-                return RedirectToAction(actionName: nameof(Index));
+
+                TempData["save"] = "Special Tag saved successfully";
+                return RedirectToAction(nameof(Index));
             }
             return View(specialTag);
         }
@@ -58,7 +60,10 @@ namespace Bazar360.Areas.Admin.Controllers
             {
                 _db.SpecialTags.Update(specialTag);
                 await _db.SaveChangesAsync();
-                return RedirectToAction(actionName: nameof(Index));
+
+                TempData["edit"] = "Successfully Updated";
+
+                return RedirectToAction(nameof(Index));
             }
             return View(specialTag);
         }
@@ -116,6 +121,9 @@ namespace Bazar360.Areas.Admin.Controllers
             {
                 _db.SpecialTags.Remove(specialTagFromDb);
                 await _db.SaveChangesAsync();
+
+                TempData["delete"] = "Special Tag deleted successfully";
+
                 return RedirectToAction(nameof(Index));
             }
             return View(specialTag);
