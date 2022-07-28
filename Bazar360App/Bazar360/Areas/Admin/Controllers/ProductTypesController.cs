@@ -31,6 +31,9 @@ namespace Bazar360.Areas.Admin.Controllers
             {
                 _db.ProductTypes.Add(productTypes);
                 await _db.SaveChangesAsync();
+
+                TempData["save"] = "Product saved successfully"; //Alertify
+
                 return RedirectToAction(actionName: nameof(Index));
             }
             return View(productTypes);
@@ -59,6 +62,7 @@ namespace Bazar360.Areas.Admin.Controllers
             {
                 _db.ProductTypes.Update(productTypes);
                 await _db.SaveChangesAsync();
+                TempData["edit"] = "Product updated successfully";
                 return RedirectToAction(actionName: nameof(Index));
             }
             return View(productTypes);
@@ -117,6 +121,8 @@ namespace Bazar360.Areas.Admin.Controllers
             {
                 _db.ProductTypes.Remove(productType);
                 await _db.SaveChangesAsync();
+
+                TempData["delete"] = "Product deleted successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(productTypes);
