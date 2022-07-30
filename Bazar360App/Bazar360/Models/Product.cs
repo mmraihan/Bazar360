@@ -12,10 +12,10 @@ namespace Bazar360.Models
 
         [Required]
         public decimal Price { get; set; }
-        public string Image { get; set; }
+       
 
         [Display(Name = "Product Color")]
-        public string ProductColor { get; set; }
+        public string? ProductColor { get; set; }
 
         [Required]
         [Display(Name = "Available")]
@@ -25,14 +25,18 @@ namespace Bazar360.Models
         [Required]
         public int ProductTypeId { get; set; }
         [ForeignKey("ProductTypeId")]
-        public virtual ProductTypes ProductTypes { get; set; }
+        public virtual ProductTypes? ProductTypes { get; set; }
 
         [Display(Name = "Special Tag")]
         [Required]
         public int SpecialTagId { get; set; }
 
         [ForeignKey("SpecialTagId")]
-        public virtual SpecialTag SpecialTag { get; set; }
+        public virtual SpecialTag? SpecialTag { get; set; }
 
+        //--Image--
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using Bazar360.Data;
 using Bazar360.Models;
 using Microsoft.AspNetCore.Mvc;
-using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bazar360.Areas.Admin.Controllers
 {
@@ -9,37 +10,42 @@ namespace Bazar360.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _db;
-        private readonly IHostingEnvironment _he;
+        private readonly IWebHostEnvironment _webHost;
 
-        public ProductController(ApplicationDbContext db, IHostingEnvironment he)
+        public ProductController(ApplicationDbContext db, IWebHostEnvironment webHost)
         {
             _db = db;
-            _he = he;
+            _webHost = webHost;
         }
         public IActionResult Index()
         {
-            var products = _db.Products.ToList();
+            var products = _db.Products.Include(c=>c.ProductTypes).Include(p=>p.SpecialTag).ToList();
             return View(products);
         }
 
         public ActionResult Create()
         {
+            ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
+            ViewData["specialTagId"] = new SelectList(_db.SpecialTags.ToList(), "Id", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product, IFormFile image)
+        public async Task<IActionResult> Create(Product product)
         {
             if (ModelState.IsValid) //Server Side Valid
             {
-                if (image !=null)
+                if (product.ImageFile != null)
                 {
-                    var name = Path.Combine(_he.WebRootPath + "/Images", Path.GetFileName(image.FileName));
+                    string folder = "Images/";
+                    folder +=Guid.NewGuid().ToString() + "_" + product.ImageFile.FileName;
+                    string serverFolder = Path.Combine(_webHost.WebRootPath, folder);
+                    product.ImageUrl = "/" + folder; //save url to db
 
-                    await  image.CopyToAsync(new FileStream(name, FileMode.Create));
-                    product.Image ="Images/" + image.FileName;
-                }  
+                    await product.ImageFile.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                 
+                }
                 _db.Products.Add(product);
                 await _db.SaveChangesAsync();
 
