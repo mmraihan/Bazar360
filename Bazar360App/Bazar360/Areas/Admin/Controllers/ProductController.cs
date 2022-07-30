@@ -46,6 +46,11 @@ namespace Bazar360.Areas.Admin.Controllers
                     await product.ImageFile.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
                  
                 }
+
+                if (product.ImageFile==null)
+                {
+                    product.ImageUrl = "/Images/No-image-found.jpg";
+                }
                 _db.Products.Add(product);
                 await _db.SaveChangesAsync();
 
@@ -59,6 +64,8 @@ namespace Bazar360.Areas.Admin.Controllers
 
         public ActionResult Edit(int? id)
         {
+           
+
             ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
             ViewData["specialTagId"] = new SelectList(_db.SpecialTags.ToList(), "Id", "Name");
 
