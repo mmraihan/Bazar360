@@ -57,5 +57,26 @@ namespace Bazar360.Areas.Admin.Controllers
         }
 
 
+        public ActionResult Edit(int? id)
+        {
+            ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
+            ViewData["specialTagId"] = new SelectList(_db.SpecialTags.ToList(), "Id", "Name");
+
+            if (id==null)
+            {
+                return NotFound();
+            }
+
+            var product = _db.Products.Include(c=>c.ProductTypes).Include(c=>c.SpecialTag).FirstOrDefault(x => x.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+
     }
 }
