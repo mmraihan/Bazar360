@@ -36,6 +36,22 @@ namespace Bazar360.Areas.Admin.Controllers
         {
             if (ModelState.IsValid) //Server Side Valid
             {
+                #region Dupilicate Product Removed
+
+                var searchProduct = _db.Products.FirstOrDefault(c => c.Name == product.Name);
+                if (searchProduct != null)
+                {
+                    ViewBag.message = "This product is already exist";
+                    ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
+                    ViewData["specialTagId"] = new SelectList(_db.SpecialTags.ToList(), "Id", "Name");
+                   
+                    return View(product);
+                }
+
+                #endregion
+
+
+
                 if (product.ImageFile != null)
                 {
                     string folder = "Images/";
