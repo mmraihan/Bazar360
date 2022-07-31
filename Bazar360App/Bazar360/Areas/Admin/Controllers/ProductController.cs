@@ -23,6 +23,19 @@ namespace Bazar360.Areas.Admin.Controllers
             return View(products);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index( decimal? lowAmount, decimal? largeAmount)
+        {
+            var products = _db.Products.Include(c => c.ProductTypes).Include(p => p.SpecialTag).Where(c=>c.Price>=lowAmount && c.Price<= largeAmount).ToList();
+            if (lowAmount==null || largeAmount==null)
+            {
+                products = _db.Products.Include(c => c.ProductTypes).Include(p => p.SpecialTag).ToList();
+                return View(products);
+            }
+            return View(products);
+        }
+
         public ActionResult Create()
         {
             ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
