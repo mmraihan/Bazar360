@@ -6,7 +6,7 @@ namespace Bazar360.Models
     {
         public int Id { get; set; }
         [Required]
-        [Display(Name = "Product Type")]
+        [Display(Name = "Category")]
         public string? ProductType { get; set; }
     }
 }

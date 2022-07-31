@@ -21,7 +21,7 @@ namespace Bazar360.Models
         [Display(Name = "Available")]
         public bool IsAvailable { get; set; }
 
-        [Display(Name = "Product Type")]
+        [Display(Name = "Category")]
         [Required]
         public int ProductTypeId { get; set; }
         [ForeignKey("ProductTypeId")]
