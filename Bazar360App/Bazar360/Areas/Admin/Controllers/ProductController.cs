@@ -132,5 +132,56 @@ namespace Bazar360.Areas.Admin.Controllers
         }
 
 
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var product = _db.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag).FirstOrDefault(x => x.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<ActionResult> Delete(int? id, Product product)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            if (id != product.Id)
+            {
+                return NotFound();
+            }
+
+            var productFromDb = _db.Products.Find(id);
+            if (productFromDb == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _db.Products.Remove(productFromDb);
+                await _db.SaveChangesAsync();
+
+                TempData["delete"] = "Product deleted successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(product);
+        }
+
+
+
+
+
     }
 }
