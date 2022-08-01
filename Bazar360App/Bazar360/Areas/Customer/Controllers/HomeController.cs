@@ -34,5 +34,17 @@ namespace Bazar360.Areas.Customer.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
+        public IActionResult Details(int? id)
+        {
+            if (id==null)
+            {
+                return NotFound();
+            }
+            var product = _db.Products.Include(c => c.ProductTypes).Include(c=>c.SpecialTag).FirstOrDefault(c => c.Id == id);
+            return View(product);
+        }
+
     }
 }
