@@ -89,9 +89,18 @@
 
 <script type="text/javascript"> 
 
-    $(document).ready( function () {
-    $('#myTable').DataTable();
-    } ); /*---jQuery Data Table---*/
+         /*---jQuery Data Table With File---*/
+
+             $(document).ready(function() {
+                $('#myTable').DataTable( {
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
+                } );
+            } ); 
+            
+         /*---Alertify--*/
         
         $(function() {
 
