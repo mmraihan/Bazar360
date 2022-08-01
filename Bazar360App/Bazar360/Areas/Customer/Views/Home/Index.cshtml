@@ -1,13 +1,30 @@
-﻿@{
+﻿@model IEnumerable<Bazar360.Models.Product> 
+
+@{
     ViewData["Title"] = "Home Page";
 }
+<br /> <br />
+<div class="row">
+    @foreach (var item in Model)
+    {<div class="col-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">
+                        <label class="text-success fw-normal" style="font-size:23px">@item.Name</label>
+                    </h4>
+                </div>
+                <img src="@item.ImageUrl" alt="Card Image" class="card-img-top" style="height: 300px;"/>
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <label style="font-size: 20px;color: #a51313"><b>Price : @item.Price</b></label>
+                        </div>
+                        <a asp-action="Detail" asp-controller="Home" asp-route-id="@item.Id" class="btn btn-outline-success fw-bold">Deatils</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="text-center">
-    
-    <h1 class="display-4">Welcome</h1>
-    <br />
-
- 
-
-
+    }
 </div>
+
