@@ -3,6 +3,21 @@
 @{
     ViewData["Title"] = "Details";
 }
+@*----------START----Remove from Cart Session-----------------------------*@
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@using Bazar360.Utility
+@{
+
+    List<Product> products = HttpContextAccessor.HttpContext.Session.Get<List<Product>>("products");
+    Product product = null;
+    if (products!=null)
+    {
+        product = products.FirstOrDefault(c => c.Id == Model.Id);
+    }
+   
+}
+@*--------------------END-----------------------------*@
 
 <br/>
 
@@ -74,7 +89,17 @@
                
             </div>
             <div class="col-8 mb-2">
-                <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
+
+                @*----------START----Remove from Cart Session-----------------------------*@
+                @if (product!=null) 
+                    {
+                        <button type="submit" class="btn btn-danger form-control" asp-action="Remove" asp-route-id="@Model.Id">Remove from Cart</button>
+                       @* <input type="submit" class="btn btn-danger form-control" asp-action="Remove" asp-route-id="@Model.Id" value="Remove"/>*@
+                    }else
+                    {
+                            <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
+                    }
+                
             </div>
             
         </div>      
