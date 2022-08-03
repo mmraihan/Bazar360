@@ -1,7 +1,9 @@
 ﻿using Bazar360.Data;
 using Bazar360.Models;
+using Bazar360.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Bazar360.Areas.Customer.Controllers
@@ -43,6 +45,31 @@ namespace Bazar360.Areas.Customer.Controllers
                 return NotFound();
             }
             var product = _db.Products.Include(c => c.ProductTypes).Include(c=>c.SpecialTag).FirstOrDefault(c => c.Id == id);
+            return View(product);
+        }
+
+        [HttpPost]
+        [ActionName("Details")]
+        public IActionResult ProductDetails(int? id)
+        {
+            List<Product> products = new List<Product>(); //Session
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var product = _db.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag).FirstOrDefault(c => c.Id == id);
+            if (product==null)
+            {
+                return NotFound();
+            }
+            products = HttpContext.Session.Get<List<Product>>("products");
+            if (products==null)
+            {
+                products = new List<Product>();
+            }
+            products.Add(product);
+            HttpContext.Session.Set("products", products); //Session
             return View(product);
         }
 
