@@ -73,16 +73,13 @@ namespace Bazar360.Areas.Customer.Controllers
             return View(product);
         }
 
-
-
-
-        [HttpPost]
+      
 
         public IActionResult Remove(int? id)
         {
             var products = HttpContext.Session.Get<List<Product>>("products");
 
-            if (products!=null)
+            if (products != null)
             {
                 var product = products.FirstOrDefault(c => c.Id == id);
                 if (product != null)
@@ -91,8 +88,41 @@ namespace Bazar360.Areas.Customer.Controllers
                     HttpContext.Session.Set("products", products);
                 }
             }
-           
+
             return RedirectToAction(nameof(Index));
         }
+
+        //[HttpPost]
+        //[ActionName("Remove")]
+
+        //public IActionResult RemoveFromCart(int? id)
+        //{
+        //    var products = HttpContext.Session.Get<List<Product>>("products");
+
+        //    if (products!=null)
+        //    {
+        //        var product = products.FirstOrDefault(c => c.Id == id);
+        //        if (product != null)
+        //        {
+        //            products.Remove(product);
+        //            HttpContext.Session.Set("products", products);
+        //        }
+        //    }
+           
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+
+        public IActionResult Cart()
+        {
+            var products = HttpContext.Session.Get<List<Product>>("products");
+            if (products==null)
+            {
+                products = new List<Product>();
+            }
+
+            return View(products);
+        }
+
     }
 }
