@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace Bazar360.Areas.Customer.Controllers
 {
@@ -20,9 +21,9 @@ namespace Bazar360.Areas.Customer.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int ? page)
         {
-            var products = _db.Products.Include(c => c.ProductTypes).Include(c => c.ProductTypes).ToList();
+            var products = _db.Products.Include(c => c.ProductTypes).Include(c => c.ProductTypes).ToList().ToPagedList(page??1,pageSize:6); //--coalescing operator
             return View(products);
         }
 

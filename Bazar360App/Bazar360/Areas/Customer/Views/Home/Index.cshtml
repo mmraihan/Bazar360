@@ -1,4 +1,9 @@
-﻿@model IEnumerable<Bazar360.Models.Product> 
+﻿ 
+﻿@using Bazar360.Models;
+@using X.PagedList.Mvc.Core;   
+@model X.PagedList.IPagedList<Product>
+
+
 
 @{
     ViewData["Title"] = "Home Page";
@@ -6,7 +11,7 @@
 <br /> <br />
 
 
-<div class="row">
+<div class="row"> 
     @foreach (var item in Model)
     {<div class="col-4">
             <div class="card mb-4">
@@ -29,4 +34,10 @@
 
     }
 </div>
+
+<div>
+    @Html.PagedListPager(Model,c=>Href("~/Customer/Home/Index?page="+c))
+</div>
+
+
 
