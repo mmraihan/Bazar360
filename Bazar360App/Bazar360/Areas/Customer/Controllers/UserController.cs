@@ -28,7 +28,7 @@ namespace Bazar360.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ApplicationUser user)
         {
-            var result =await _userManager.CreateAsync(user);
+            var result =await _userManager.CreateAsync(user); //----Notes 13
 
             if (result.Succeeded)
             {
