@@ -28,16 +28,23 @@ namespace Bazar360.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ApplicationUser user)
         {
-            var result =await _userManager.CreateAsync(user); //----Notes 13
-
-            if (result.Succeeded)
+            if (ModelState.IsValid) //--Note 14
             {
+                var result = await _userManager.CreateAsync(user, user.PasswordHash); //----Note 13
+
+                if (result.Succeeded)
+                {
+                    TempData["Save"] = "User created successfully";
+                    return RedirectToAction("Index");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
 
             }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
+           
+
             return View();
         }
 
