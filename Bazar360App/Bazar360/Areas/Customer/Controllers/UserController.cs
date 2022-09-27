@@ -51,5 +51,37 @@ namespace Bazar360.Areas.Customer.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(x => x.Id == id);
+            if (user==null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ApplicationUser appUser)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(x => x.Id == appUser.Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.FirstName=appUser.FirstName;
+            user.LastName = appUser.LastName;
+            var result =  await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["save"] = "User updated successfully";
+                return RedirectToAction(nameof(Index));
+
+            }
+            return View(user);
+        }
+
     }
 }
