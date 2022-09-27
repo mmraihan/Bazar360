@@ -1,4 +1,5 @@
-﻿using Bazar360.Models;
+﻿using Bazar360.Data;
+using Bazar360.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,15 +10,17 @@ namespace Bazar360.Areas.Customer.Controllers
     {
 
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _db;
 
-        public UserController(UserManager<IdentityUser> userManager)
+        public UserController(UserManager<IdentityUser> userManager, ApplicationDbContext db)
         {
             _userManager = userManager;
+            _db = db;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(_db.ApplicationUsers.ToList());
         }
 
         public async Task<IActionResult> Create()
