@@ -83,5 +83,15 @@ namespace Bazar360.Areas.Customer.Controllers
             return View(user);
         }
 
+        public async Task<IActionResult> Detail(string id)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(x => x.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
     }
 }
