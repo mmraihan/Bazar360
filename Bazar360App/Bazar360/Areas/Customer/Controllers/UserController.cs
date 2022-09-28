@@ -93,5 +93,46 @@ namespace Bazar360.Areas.Customer.Controllers
 
             return View(user);
         }
+
+        public async Task<IActionResult> Lockout(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = _db.ApplicationUsers.FirstOrDefault(x => x.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Lockout(ApplicationUser user)
+        {
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userInfo = _db.ApplicationUsers.FirstOrDefault(x => x.Id ==user.Id);
+           
+            if (userInfo == null)
+            {
+                return NotFound();
+            }           
+            userInfo.LockoutEnd = DateTime.Now.AddYears(200);
+            var result= _db.SaveChanges();
+
+            if (result>0)
+            {
+                TempData["save"] = "User locked successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+
+
+        }
     }
 }
