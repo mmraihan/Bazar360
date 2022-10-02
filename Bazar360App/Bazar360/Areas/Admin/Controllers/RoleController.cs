@@ -26,12 +26,21 @@ namespace Bazar360.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name)
+        public async Task<IActionResult> Create(string name) 
         {
             IdentityRole identityRole = new IdentityRole()
             {
                 Name = name
             };
+
+            var isExist = await _roleManager.RoleExistsAsync(name);
+
+            if (isExist)
+            {
+                ViewBag.message = "This role is already exist!";
+                ViewBag.name = name;
+                return View();
+            }
            
             var result = await _roleManager.CreateAsync(identityRole);
             if (result.Succeeded)
