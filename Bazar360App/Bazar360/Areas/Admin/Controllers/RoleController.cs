@@ -19,5 +19,27 @@ namespace Bazar360.Areas.Admin.Controllers
             ViewBag.Roles = roles;
             return View();
         }
+
+        public async Task <IActionResult> Create()
+        {       
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(string name)
+        {
+            IdentityRole identityRole = new IdentityRole()
+            {
+                Name = name
+            };
+           
+            var result = await _roleManager.CreateAsync(identityRole);
+            if (result.Succeeded)
+            {
+                TempData["save"] = "Role created successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
     }
 }
