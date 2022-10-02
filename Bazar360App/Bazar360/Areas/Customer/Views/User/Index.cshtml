@@ -28,6 +28,10 @@
             <th>
                Username
             </th>
+
+            <th>
+               Status
+            </th>
  
             <th></th>
             <th></th>
@@ -40,6 +44,15 @@
                 <tr>
                     <td>@item.FirstName @item.LastName</td>
                     <td>@item.UserName</td>
+                    @if (item.LockoutEnd==null)
+                    {
+                        <td>Active</td>
+                    }
+                    else
+                    {
+                        <td>Deactive</td>
+                    }
+
                     
                     <td>
                         <partial name="_UserPartial" model="@item.Id" />
