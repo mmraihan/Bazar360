@@ -134,5 +134,88 @@ namespace Bazar360.Areas.Customer.Controllers
 
 
         }
+
+
+        public async Task<IActionResult> Active(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = _db.ApplicationUsers.FirstOrDefault(x => x.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Active(ApplicationUser user)
+        {
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userInfo = _db.ApplicationUsers.FirstOrDefault(x => x.Id == user.Id);
+
+            if (userInfo == null)
+            {
+                return NotFound();
+            }
+            userInfo.LockoutEnd = null;
+            var result = _db.SaveChanges();
+
+            if (result > 0)
+            {
+                TempData["save"] = "User Unlocked successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
+
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var user = _db.ApplicationUsers.FirstOrDefault(x => x.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(ApplicationUser user)
+        {
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var userInfo = _db.ApplicationUsers.FirstOrDefault(x => x.Id == user.Id);
+
+            if (userInfo == null)
+            {
+                return NotFound();
+            }
+            _db.ApplicationUsers.Remove(userInfo);
+            var result = _db.SaveChanges();
+
+            if (result > 0)
+            {
+                TempData["save"] = "User deleted successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
     }
 }
