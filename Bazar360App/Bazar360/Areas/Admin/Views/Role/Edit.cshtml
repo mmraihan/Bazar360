@@ -1,12 +1,13 @@
 ﻿
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
 <br/>
 
-<h2 class="text-success fw-bold">Create New Role</h2>
-<form class="text-dark"  method="post" id="roleForm">
+<h2 class="text-success fw-bold">Edit Role</h2>
+
+<form class="text-dark" asp-action="Edit" method="post" id="roleForm">
     <div class="p-4 rounded border">
         <div asp-validation-summary="ModelOnly" class="text-danger">
             
@@ -19,6 +20,8 @@
                 <label>Role Name</label>
             </div>
             <div class="col-5 mb-2">
+                <input type="hidden" id="id" name="id" value="@ViewBag.id"/> @*---Note 18----*@
+
                 <input id="name" name="name" value="@ViewBag.name" class="form-control" required/> @*---Note 17----*@
             </div>
     
@@ -29,7 +32,7 @@
 
 
         <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Save"/>
+            <input type="submit" class="btn btn-primary" value="Update"/>
             <a asp-action="Index" class="btn btn-success">Back to List</a>
         </div>
     </div>

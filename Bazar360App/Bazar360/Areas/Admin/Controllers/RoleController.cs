@@ -51,18 +51,29 @@ namespace Bazar360.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Edit()
+        public async Task<IActionResult> Edit(string id)
         {
+            var role = await _roleManager.FindByIdAsync(id);
+            if (role==null)
+            {
+                return NotFound();
+            }
+            ViewBag.id = role.Id;
+            ViewBag.name = role.Name;
+
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(string name)
+        public async Task<IActionResult> Edit(string id, string name)
         {
-            IdentityRole identityRole = new IdentityRole()
+
+            var role = await _roleManager.FindByIdAsync(id);
+            if (role == null)
             {
-                Name = name
-            };
+                return NotFound();
+            }
+            role.Name = name;
 
             var isExist = await _roleManager.RoleExistsAsync(name);
 
@@ -73,10 +84,10 @@ namespace Bazar360.Areas.Admin.Controllers
                 return View();
             }
 
-            var result = await _roleManager.CreateAsync(identityRole);
+            var result = await _roleManager.UpdateAsync(role);
             if (result.Succeeded)
             {
-                TempData["save"] = "Role created successfully";
+                TempData["save"] = "Role updated successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View();
