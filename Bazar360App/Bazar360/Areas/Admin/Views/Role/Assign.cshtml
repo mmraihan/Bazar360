@@ -1,0 +1,59 @@
+﻿@model Bazar360.Areas.Admin.ViewModels.RoleUserVm
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<br/>
+
+<h2 class="text-success fw-bold">Assign Role</h2>
+<form class="text-dark" asp-action="Assign" method="post" >
+    <div class="p-4 rounded border">
+        <div asp-validation-summary="ModelOnly" class="text-danger">
+            
+        </div>
+        <h3 class="text-danger text-center pb-3">@ViewBag.message</h3>
+       
+
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="UserId"></label>
+            </div>
+            <div class="col-5 mb-2">
+               <select asp-for="UserId" asp-items="ViewBag.userId" class="form-select">
+                   <option value="">--SELECT ONE--</option>
+               </select>
+              
+              
+            </div>
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>
+
+         <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="RoleId"></label>
+            </div>
+            <div class="col-5 mb-2">
+              <select asp-for="RoleId" asp-items="ViewBag.roleId"  class="form-select">
+                    <option value="">--SELECT ONE--</option>
+              </select>
+            </div>
+            <span asp-validation-for="RoleId" class="text-danger"></span>
+        </div>
+
+        
+        <br />
+
+
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Assign"/>
+            <a asp-action="Index" class="btn btn-success">Back to List</a>
+        </div>
+    </div>
+</form>
+
+@*---------Note 2-------------*@
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

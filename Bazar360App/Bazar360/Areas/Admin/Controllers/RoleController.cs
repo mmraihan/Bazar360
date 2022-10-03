@@ -1,16 +1,21 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Bazar360.Data;
+using Bazar360.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Bazar360.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class RoleController : Controller
     {
-
+        
         private readonly RoleManager<IdentityRole> _roleManager;
-        public RoleController(RoleManager<IdentityRole> roleManager)
+        private readonly ApplicationDbContext _user;
+        public RoleController(RoleManager<IdentityRole> roleManager, ApplicationDbContext user)
         {
             _roleManager = roleManager;
+            _user = user;
         }
 
         public IActionResult Index()
@@ -123,5 +128,16 @@ namespace Bazar360.Areas.Admin.Controllers
             }
             return View();
         }
+
+        public async Task<IActionResult> Assign()
+        {
+            ViewData["userId"] = new SelectList(_user.ApplicationUsers.ToList(), "Id", "UserName");
+            ViewData["roleId"] = new SelectList(_roleManager.Roles.ToList(), "Id", "Name");
+            return View();
+                   
+        }
+
+        
+
     }
 }
