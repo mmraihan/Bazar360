@@ -1,4 +1,5 @@
-﻿using Bazar360.Data;
+﻿using Bazar360.Areas.Admin.ViewModels;
+using Bazar360.Data;
 using Bazar360.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,14 @@ namespace Bazar360.Areas.Admin.Controllers
     {
         
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<IdentityUser> _userManager;
+
         private readonly ApplicationDbContext _user;
-        public RoleController(RoleManager<IdentityRole> roleManager, ApplicationDbContext user)
+        public RoleController(RoleManager<IdentityRole> roleManager, ApplicationDbContext user, UserManager<IdentityUser> userManager)
         {
             _roleManager = roleManager;
             _user = user;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -132,12 +136,29 @@ namespace Bazar360.Areas.Admin.Controllers
         public async Task<IActionResult> Assign()
         {
             ViewData["userId"] = new SelectList(_user.ApplicationUsers.ToList(), "Id", "UserName");
-            ViewData["roleId"] = new SelectList(_roleManager.Roles.ToList(), "Id", "Name");
+            ViewData["roleId"] = new SelectList(_roleManager.Roles.ToList(), "Name", "Name"); //----Note 19
             return View();
                    
         }
+        [HttpPost]
+        public async Task<IActionResult> Assign(RoleUserVm roleUser)
+        {
+            var user = _user.ApplicationUsers.FirstOrDefault(c => c.Id == roleUser.UserId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var role = await _userManager.AddToRoleAsync(user, roleUser.RoleId); //----Note 19
+            if (role.Succeeded)
+            {
+                TempData["save"] = "User Role assigned successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
 
-        
+        }
+
+
 
     }
 }
