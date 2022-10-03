@@ -135,7 +135,7 @@ namespace Bazar360.Areas.Admin.Controllers
 
         public async Task<IActionResult> Assign()
         {
-            ViewData["userId"] = new SelectList(_user.ApplicationUsers.ToList(), "Id", "UserName");
+            ViewData["userId"] = new SelectList(_user.ApplicationUsers.Where(c=>c.LockoutEnd==null).ToList(), "Id", "UserName");
             ViewData["roleId"] = new SelectList(_roleManager.Roles.ToList(), "Name", "Name"); //----Note 19
             return View();
                    
@@ -148,6 +148,15 @@ namespace Bazar360.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            var isRoleExist= await _userManager.IsInRoleAsync(user, roleUser.RoleId);
+            if (isRoleExist)
+            {
+                ViewBag.message = "This role is already assigned!";
+                ViewData["userId"] = new SelectList(_user.ApplicationUsers.Where(c => c.LockoutEnd == null).ToList(), "Id", "UserName");
+                ViewData["roleId"] = new SelectList(_roleManager.Roles.ToList(), "Name", "Name"); //----Note 19
+                return View();
+            }
+
             var role = await _userManager.AddToRoleAsync(user, roleUser.RoleId); //----Note 19
             if (role.Succeeded)
             {
