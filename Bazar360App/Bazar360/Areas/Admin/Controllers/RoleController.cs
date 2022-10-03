@@ -50,5 +50,36 @@ namespace Bazar360.Areas.Admin.Controllers
             }
             return View();
         }
+
+        public async Task<IActionResult> Edit()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string name)
+        {
+            IdentityRole identityRole = new IdentityRole()
+            {
+                Name = name
+            };
+
+            var isExist = await _roleManager.RoleExistsAsync(name);
+
+            if (isExist)
+            {
+                ViewBag.message = "This role is already exist!";
+                ViewBag.name = name;
+                return View();
+            }
+
+            var result = await _roleManager.CreateAsync(identityRole);
+            if (result.Succeeded)
+            {
+                TempData["save"] = "Role created successfully";
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
     }
 }
