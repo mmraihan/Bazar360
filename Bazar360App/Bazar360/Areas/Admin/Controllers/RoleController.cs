@@ -168,6 +168,27 @@ namespace Bazar360.Areas.Admin.Controllers
         }
 
 
+        public IActionResult AssignUserRole() //--- note 20
+        {
+            var result = (from ur in _user.UserRoles
+                         join r in _user.Roles
+                         on ur.RoleId equals r.Id
 
+                         join a in _user.ApplicationUsers
+                         on ur.UserId equals a.Id
+
+                         select new UserRoleMaping()
+                         {
+                             UserId = ur.UserId,
+                             RoleId = ur.RoleId,
+                             UserName = a.UserName,
+                             RoleName = r.Name
+                         }).ToList();
+
+            ViewBag.UserRoles = result;
+            return View();
+
+           
+        }
     }
 }
