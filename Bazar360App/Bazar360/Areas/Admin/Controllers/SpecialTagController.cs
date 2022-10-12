@@ -1,10 +1,12 @@
 ﻿using Bazar360.Data;
 using Bazar360.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bazar360.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class SpecialTagController : Controller
     {
         private readonly ApplicationDbContext _db;

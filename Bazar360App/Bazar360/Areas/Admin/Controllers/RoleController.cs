@@ -114,7 +114,7 @@ namespace Bazar360.Areas.Admin.Controllers
 
             return View();
         }
-
+        
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirm(string id)
@@ -151,11 +151,12 @@ namespace Bazar360.Areas.Admin.Controllers
             var isRoleExist= await _userManager.IsInRoleAsync(user, roleUser.RoleId);
             if (isRoleExist)
             {
-                ViewBag.message = "This role is already assigned!";
+                ViewBag.message = "This user already assigned in this role";
                 ViewData["userId"] = new SelectList(_user.ApplicationUsers.Where(c => c.LockoutEnd == null).ToList(), "Id", "UserName");
                 ViewData["roleId"] = new SelectList(_roleManager.Roles.ToList(), "Name", "Name"); //----Note 19
                 return View();
             }
+          
 
             var role = await _userManager.AddToRoleAsync(user, roleUser.RoleId); //----Note 19
             if (role.Succeeded)
@@ -166,7 +167,6 @@ namespace Bazar360.Areas.Admin.Controllers
             return View();
 
         }
-
 
         public IActionResult AssignUserRole() //--- note 20
         {
@@ -187,8 +187,10 @@ namespace Bazar360.Areas.Admin.Controllers
 
             ViewBag.UserRoles = result;
             return View();
-
            
         }
+
+
+
     }
 }
