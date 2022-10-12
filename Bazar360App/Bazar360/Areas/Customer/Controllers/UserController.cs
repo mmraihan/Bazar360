@@ -37,6 +37,7 @@ namespace Bazar360.Areas.Customer.Controllers
 
                 if (result.Succeeded)
                 {
+                    var isSaveRole = await _userManager.AddToRoleAsync(user, "User");
                     TempData["Save"] = "User created successfully";
                     return RedirectToAction("Index");
                 }
