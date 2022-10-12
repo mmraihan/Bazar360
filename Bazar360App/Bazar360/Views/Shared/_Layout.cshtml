@@ -2,6 +2,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 @using Bazar360.Utility
 @{
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");  /*-------GetHashCode role from  Login*/
     int count = 0;
     List<Product> products = HttpContextAccessor.HttpContext.Session.Get<List<Product>>("products");
     if (products==null)
